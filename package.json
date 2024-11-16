@@ -16,12 +16,18 @@
   "author": "Group 1",
   "license": "ISC",
   "dependencies": {
+    "@libsql/client": "^0.14.0",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "geoip-lite": "^1.4.10",
+    "moment-timezone": "^0.5.46",
     "node": "^18.20.5"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.7",
     "@types/express": "^5.0.0",
+    "@types/geoip-lite": "^1.4.4",
     "@types/node": "^22.9.0",
     "concurrently": "^9.1.0",
     "nodemon": "^3.1.7",

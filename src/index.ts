@@ -1,15 +1,24 @@
-import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import express from "express";
+import { sessionRouter } from "./routes";
+import bodyParser from "body-parser";
+import cookieParser from 'cookie-parser';
 
-dotenv.config();
-
-const app: Express = express();
+const app = express();
 const port = process.env.PORT || 3000;
+const jsonParser = bodyParser.json();
+const urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("habso + TypeScript Server");
-});
+app.use(jsonParser);
+app.use(urlencodedParser);
+app.use(cookieParser());
+app.set('trust proxy', true)
+
+// Middleware
+// app.use(validateSession);
+
+// Routers
+app.use("/session", sessionRouter);
 
 app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}`);
 });
