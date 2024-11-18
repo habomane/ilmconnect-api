@@ -1,11 +1,19 @@
-// import express from 'express'
-// import { UserController } from '../controllers/UserController';
-// import { loginUserValidation, registerUserValidation } from '../helpers';
-// export const userRouter = express.Router();
-// const userController = new UserController();
+import express from 'express'
 
-// // Route only concerned with HTTP Layer
+import { loginUserValidation, registerUserValidation,
+    updateUserValidation,
+    updateUserPasswordValidation
+ } from '../../helpers';
+import { UserController } from '../../controllers';
 
-// userRouter.post("/register", registerUserValidation, userController.registerUser);
-// userRouter.post("/login", loginUserValidation, userController.logUser);
-// userRouter.delete("/delete/:userKey", userController.deleteUser)
+export const userRouter = express.Router();
+const userController = new UserController();
+
+// Route only concerned with HTTP Layer
+
+userRouter.get('/:userKey', userController.getUser);
+userRouter.post("/register", registerUserValidation, userController.createUser);
+userRouter.post("/login", loginUserValidation, userController.loginUser);
+userRouter.delete("/delete/:userKey", userController.deleteUser);
+userRouter.put('/update/:userKey', updateUserValidation, userController.updateUser);
+userRouter.put('/update/password/:userKey', updateUserPasswordValidation, userController.updatePassword);

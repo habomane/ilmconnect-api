@@ -1,9 +1,25 @@
 import { Request, Response } from "express";
-import { HttpException, APP_ERROR_MESSAGE } from "../error-handling";
+import {
+  HttpException,
+  APP_ERROR_MESSAGE,
+  HTTP_RESPONSE_CODE,
+} from "../error-handling";
 
-export const errorMiddleware = (error: HttpException, request: Request, response: Response) => {
-  const status = error.status ? error.status : 500;
-  const message = status === 500 ? APP_ERROR_MESSAGE.serverError : error.message;
-  const errors = error.error;
-  response.status(status).send({ status, message, error: errors });
-}
+export const errorMiddleware = (
+  error: unknown,
+  request: Request,
+  response: Response
+) => {
+  let returnedError: HttpException;
+  if (error instanceof HttpException) {
+    returnedError = error;
+  } else {
+    const errorMessage =
+      error instanceof Error ? error.message : APP_ERROR_MESSAGE.serverError;
+    returnedError = new HttpException(
+      HTTP_RESPONSE_CODE.SERVER_ERROR,
+      errorMessage
+    );
+  }
+  response.status(returnedError.status).send(returnedError);
+};

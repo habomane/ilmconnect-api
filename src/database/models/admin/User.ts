@@ -1,3 +1,5 @@
+import { convertDateToUserTimezoneFromIP } from "../../../helpers";
+
 export class User {
   userKey: string;
   firstName: string;
@@ -5,11 +7,10 @@ export class User {
   email: string;
   passwordHash: string;
   salt: string;
-  streetAddress: string;
-  city: string;
+  timezone: string;
   state: string;
-  postalCode: string;
   country: string;
+  dateCreated: string;
 
   constructor(
     userKey: string,
@@ -18,11 +19,10 @@ export class User {
     email: string,
     passwordHash: string,
     salt: string,
-    streetAddress: string,
-    city: string,
+    timezone: string,
     state: string,
-    postalCode: string,
-    country: string
+    country: string,
+    dateCreated: string
   ) {
     this.userKey = userKey;
     this.firstName = firstName;
@@ -30,10 +30,12 @@ export class User {
     this.email = email;
     this.passwordHash = passwordHash;
     this.salt = salt;
-    this.streetAddress = streetAddress;
-    this.city = city;
+    this.timezone = timezone;
     this.state = state;
-    this.postalCode = postalCode;
     this.country = country;
+    this.dateCreated = dateCreated;
   }
+
 }
+
+

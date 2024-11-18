@@ -17,20 +17,25 @@
   "license": "ISC",
   "dependencies": {
     "@libsql/client": "^0.14.0",
+    "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-validator": "^7.2.0",
     "geoip-lite": "^1.4.10",
     "moment-timezone": "^0.5.46",
     "node": "^18.20.5"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.7",
     "@types/express": "^5.0.0",
     "@types/geoip-lite": "^1.4.4",
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.9.0",
     "concurrently": "^9.1.0",
     "nodemon": "^3.1.7",
+    "ts-jest": "^29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   }

@@ -1,11 +1,34 @@
-import geoip from 'geoip-lite';
 import moment from 'moment-timezone';
 import { APP_ERROR_MESSAGE, HTTP_RESPONSE_CODE, HttpException } from '../error-handling';
 
-export const getDateGMT = (date: Date, ipAddress: string): string => {
-    const geo = geoip.lookup(ipAddress);
-    if(!geo) { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
-    
-    const timezone = moment.tz(geo.ll, geo.timezone).format('z');
-    return timezone;
+export const getTimezoneFromIP = async (ipAddress: string): Promise<number> => {
+    if(ipAddress === '::1' || ipAddress === '' || ipAddress === null) { return -5; }
+    const response = await fetch(`http://ip-api.com/json/${ipAddress}`);
+    const geo = await response.json();
+  
+    if (geo.status !== 'success') {
+        throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError);
+    }
+    const utcOffset = moment.tz(geo.timezone).utcOffset() / 60;
+    return utcOffset;
+}
+
+export const convertDateToGMT = (date: Date, timeDifference: number): Date => {
+    date.setHours(date.getHours() + ( -1 * timeDifference) );
+    return date;
+}
+
+
+export const convertDateToUserTimezoneFromIP = async (date: Date, ipAddress: string) => {
+    const timezoneOffset = await getTimezoneFromIP(ipAddress);
+    return convertDateToGMT(date, timezoneOffset * -1);
+}
+
+export const convertDateToGMTTimezoneFromIP = async (date: Date, ipAddress: string) => {
+    const timezoneOffset = await getTimezoneFromIP(ipAddress);
+    return convertDateToGMT(date, timezoneOffset);
+}
+
+export const validateSessionNotExpired = (date: Date): boolean => {
+    return date > new Date();
 }

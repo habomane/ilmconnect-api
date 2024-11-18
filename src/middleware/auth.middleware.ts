@@ -1,29 +1,34 @@
-// import { NextFunction, Request, Response } from "express";
-// import { UserSessionController } from "../controllers/UserSessionController";
+import { NextFunction, Request, Response } from "express";
+import { Session } from "../database";
+import { SessionController } from "../controllers";
 
-// export const validateSession = (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   console.log(req.url);
-//   const userSessionController = new UserSessionController();
-//   if (req.url === "/user/login" || req.url === "/user/register") {
-//     next();
-//     return;
-//   }
-//   next();
-//   // userSessionController.retrieveSession(req, res, next);
-// };
+export const validateSessionMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const sessionController = new SessionController();
+  if (req.url === "/user/login" || req.url === "/user/register") {
+    next();
+    return;
+  }
+  sessionController.validateSession(req, res, next);
+};
 
-// export const setCookies = (req: Request, res: Response, next: NextFunction) => {
-//   const sessionKey = "hello";
+export const setCookiesMiddleware = async (
+  session: Session,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const dateExpiredUserTimezone = await session.getDateUserTimezone(
+    req.ip || ""
+  );
+  res.cookie("token", session.token, {
+    secure: process.env.NODE_ENV !== "development",
+    httpOnly: true,
+    expires: dateExpiredUserTimezone,
+  });
 
-//   res.cookie("sessionKey", sessionKey, {
-//     secure: process.env.NODE_ENV !== "development",
-//     httpOnly: true,
-//     expires: new Date("11/8/2024"),
-//   });
-
-//   next();
-// };
+  next();
+};
