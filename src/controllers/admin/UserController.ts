@@ -9,12 +9,15 @@ import { errorMiddleware } from "../../middleware";
 import { HttpResponse, UserDTO, UserPasswordUpdateDTO, UserUpdateDTO } from "../../models";
 import { UserService } from "../../services";
 import { NextFunction, Request, Response } from "express";
+import { SessionController } from "./SessionController";
 
 export class UserController {
   userService: UserService;
+  sessionController: SessionController;
 
   constructor() {
     this.userService = new UserService();
+    this.sessionController = new SessionController();
   }
 
   getUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -32,10 +35,12 @@ export class UserController {
   createUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const createdUserDTO = new UserDTO(req.body["firstName"], req.body["lastName"], req.body["email"], req.body["password"], req.body["timezone"], req.body["state"], req.body["country"]);
+        const userKey = createdUserDTO.userKey;
         const responseBody = await this.userService.createuser(createdUserDTO);
         const response = new HttpResponse(HTTP_RESPONSE_CODE.CREATED, APP_SUCCESS_MESSAGE.createdUser, responseBody);
 
-        res.status(response.status).send(response);
+        this.sessionController.createSession(userKey, response, req, res, next);
+        
     } catch (error) {
       errorMiddleware(error, req, res);
     }

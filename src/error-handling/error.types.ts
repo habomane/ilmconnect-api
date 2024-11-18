@@ -24,6 +24,7 @@ export const HTTP_RESPONSE_CODE = {
     sessionByTokenDoesntExist: "Session for token does not exist",
     invalidPassword: "Password is invalid",
     invalidEmail: "Email address is invalid.",
+    emailNotAvailable: "Email already in use.",
     invalidRequest: "Request is invalid. Missing fields.",
     sessionExpired: "Session expired. Please log in again.",
   };

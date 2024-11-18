@@ -15,7 +15,7 @@ export const errorMiddleware = (
     returnedError = error;
   } else {
     const errorMessage =
-      error instanceof Error ? error.message : APP_ERROR_MESSAGE.serverError;
+      error instanceof Error && error.message !== null ? error.message : APP_ERROR_MESSAGE.serverError;
     returnedError = new HttpException(
       HTTP_RESPONSE_CODE.SERVER_ERROR,
       errorMessage

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { Session } from "../database";
 import { SessionController } from "../controllers";
+import { HttpResponse } from "../models";
 
 export const validateSessionMiddleware = (
   req: Request,
@@ -17,6 +18,7 @@ export const validateSessionMiddleware = (
 
 export const setCookiesMiddleware = async (
   session: Session,
+  response: HttpResponse,
   req: Request,
   res: Response,
   next: NextFunction
@@ -30,5 +32,5 @@ export const setCookiesMiddleware = async (
     expires: dateExpiredUserTimezone,
   });
 
-  next();
+  res.status(response.status).send(response);
 };

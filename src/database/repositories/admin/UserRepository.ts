@@ -10,6 +10,13 @@ export class UserRepository {
     db: Client = tursoDB;
 
     createUser = async(user: User) : Promise<UserResponseDTO> => {
+        const emailResponse = await this.db.execute({
+            sql: UserQueries.getUserByEmail,
+            args: [user.email]
+        })
+
+        if(emailResponse.rows.length !== 0) { throw new HttpException(HTTP_RESPONSE_CODE.CONFLICT, APP_ERROR_MESSAGE.emailNotAvailable); }
+        
         const response = await this.db.execute({
             sql:  UserQueries.createUser,
             args: [user.userKey, user.firstName, user.lastName, user.email, user.passwordHash, user.salt, user.state, user.country, user.timezone, user.dateCreated]

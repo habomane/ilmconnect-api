@@ -6,7 +6,7 @@ import {
 } from "../../error-handling";
 import { validateSessionNotExpired } from "../../helpers";
 import { errorMiddleware, setCookiesMiddleware } from "../../middleware";
-import { SessionDTO } from "../../models";
+import { HttpResponse, SessionDTO } from "../../models";
 import { SessionService } from "../../services";
 import { NextFunction, Request, Response } from "express";
 
@@ -35,17 +35,18 @@ export class SessionController {
   };
 
   createSession = async (
-    user: User,
+    userKey: string,
+    returnedData: HttpResponse,
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     try {
       const response = await this.sessionService.createSession(
-        new SessionDTO(user.userKey, req.ip || "")
+        new SessionDTO(userKey, req.ip || "")
       );
       if (response) {
-        setCookiesMiddleware(response, req, res, next);
+        setCookiesMiddleware(response, returnedData, req, res, next);
       }
     } catch (error) {
       errorMiddleware(error, req, res);
