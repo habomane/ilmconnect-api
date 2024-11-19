@@ -35,11 +35,11 @@ export class SessionRepository {
 
     getSessionByToken = async (token: string) => {
         const response = await this.db.execute({
-            sql: SessionQueries.getLatestSessionByUser,
+            sql: SessionQueries.getLatestSessionByToken,
             args: [token]
         })
 
-        if(response.rows.length === 0) { throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND, APP_ERROR_MESSAGE.sessionByUserDoesntExist); }
+        if(response.rows.length === 0) { throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND, APP_ERROR_MESSAGE.sessionByTokenDoesntExist); }
 
         const returnedUserKey: string = String(response.rows[0]["UserKey"]);
         const returnedToken: string = String(response.rows[0]["Token"]);

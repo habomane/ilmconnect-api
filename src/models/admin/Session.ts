@@ -12,6 +12,7 @@ export class SessionDTO {
     this.userKey = userKey;
     this.token = randomUUID();
     this.dateExpiration = new Date();
+    this.dateExpiration.setHours(this.dateExpiration.getHours() + 12)
     this.ipAddress = ipAddress;
   }
 
@@ -21,6 +22,7 @@ export class SessionDTO {
   };
 
   convertSessionExpirationDateToGMT = async (): Promise<Date> => {
-    return await convertDateToGMTTimezoneFromIP(this.dateExpiration, this.ipAddress);
+    await convertDateToGMTTimezoneFromIP(this.dateExpiration, this.ipAddress);
+    return this.dateExpiration;
   };
 }

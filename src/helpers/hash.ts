@@ -17,6 +17,7 @@ export const hashPassword = async (password: string): Promise<HashedPassword> =>
     return new HashedPassword(hashedPassword, salt);
 }
 
-export const validatePasswordHash = async (password: string, salt: string): Promise<string> => {
-    return await hash(password, salt);
+export const validatePasswordHash = async (password: string, passwordHash: string, salt: string): Promise<boolean> => {
+    const reHashedPassword = await hash(password, salt);
+    return reHashedPassword === passwordHash;
 }

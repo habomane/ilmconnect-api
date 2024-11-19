@@ -57,12 +57,12 @@ export class UserUpdateDTO {
         state?: string,
         country?: string
     ) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.timezone = timezone;
-        this.state = state;
-        this.country = country;
+        this.firstName = firstName === "" ? undefined : firstName;
+        this.lastName = lastName === "" ? undefined : lastName;
+        this.email = email === "" ? undefined : email;
+        this.timezone = timezone === "" ? undefined : timezone;
+        this.state = state === "" ? undefined : state;
+        this.country = country === "" ? undefined : country;
     }
 }
 
@@ -109,6 +109,6 @@ export class UserResponseDTO {
     }
 
     setDateCreatedToUserTimezone = async (ipAddress: string): Promise<void> => {
-        this.dateJoined = await convertDateToUserTimezoneFromIP(this.dateJoined, ipAddress);
+        await convertDateToUserTimezoneFromIP(this.dateJoined, ipAddress);
       }
 }

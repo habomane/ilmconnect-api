@@ -13,9 +13,10 @@ export const getTimezoneFromIP = async (ipAddress: string): Promise<number> => {
     return utcOffset;
 }
 
-export const convertDateToGMT = (date: Date, timeDifference: number): Date => {
-    date.setHours(date.getHours() + ( -1 * timeDifference) );
-    return date;
+export const convertDateToGMT = (date: Date, timeDifference: number) => {
+    
+    const diff = date.getHours() + ( -1 * timeDifference);
+    date.setHours(diff);
 }
 
 

@@ -16,6 +16,6 @@ export class SessionService {
     }
 
     getSessionByToken = async (token: string): Promise<Session> => {
-        return this.sessionRepoistory.getSessionByUser(token);
+        return this.sessionRepoistory.getSessionByToken(token);
     }
 }

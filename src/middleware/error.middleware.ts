@@ -14,12 +14,11 @@ export const errorMiddleware = (
   if (error instanceof HttpException) {
     returnedError = error;
   } else {
-    const errorMessage =
-      error instanceof Error && error.message !== null ? error.message : APP_ERROR_MESSAGE.serverError;
     returnedError = new HttpException(
       HTTP_RESPONSE_CODE.SERVER_ERROR,
-      errorMessage
+      APP_ERROR_MESSAGE.serverError
     );
   }
-  response.status(returnedError.status).send(returnedError);
+  console.log({error})
+  response.status(returnedError.status).send({status: returnedError.status, message: returnedError.message});
 };

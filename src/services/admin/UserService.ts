@@ -27,7 +27,7 @@ export class UserService {
         await this.userRepoistory.deleteUser(userKey);
     }
 
-    validateUser = async (emailAddresss: string, password: string): Promise<UserResponseDTO> => {
+    validateUser = async (emailAddresss: string, password: string): Promise<{userKey: string, user: UserResponseDTO}> => {
         return await this.userRepoistory.validateUserCredentials(emailAddresss, password);
     }
 

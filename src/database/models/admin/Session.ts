@@ -12,7 +12,9 @@ export class Session {
   }
 
   getDateUserTimezone = async (ipAddress: string) : Promise<Date> => {
-    return await convertDateToUserTimezoneFromIP(new Date(this.dateExpiration), ipAddress);
+    const date = new Date(this.dateExpiration);
+    await convertDateToUserTimezoneFromIP(date, ipAddress);
+    return date;
   }
 
   getDateExpiration = () : Date => {

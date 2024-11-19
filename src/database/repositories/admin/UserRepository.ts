@@ -16,7 +16,7 @@ export class UserRepository {
         })
 
         if(emailResponse.rows.length !== 0) { throw new HttpException(HTTP_RESPONSE_CODE.CONFLICT, APP_ERROR_MESSAGE.emailNotAvailable); }
-        
+
         const response = await this.db.execute({
             sql:  UserQueries.createUser,
             args: [user.userKey, user.firstName, user.lastName, user.email, user.passwordHash, user.salt, user.state, user.country, user.timezone, user.dateCreated]
@@ -35,13 +35,13 @@ export class UserRepository {
 
         if(response.rows.length === 0) { throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND, APP_ERROR_MESSAGE.userDoesntExist); }
 
-        const data = response.toJSON()[0];
+        const data = JSON.parse(JSON.stringify(response.rows[0]));
 
         return new UserResponseDTO(data["FirstName"], data["LastName"], data["Email"], data["Timezone"], data["State"], data["Country"], data["DateCreated"]);
 
     }
 
-    validateUserCredentials = async (emailAddress: string, password: string): Promise<UserResponseDTO> => {
+    validateUserCredentials = async (emailAddress: string, password: string): Promise<{userKey: string, user: UserResponseDTO}> => {
         const response = await this.db.execute({
             sql:  UserQueries.getUserByEmail,
             args: [emailAddress]
@@ -49,20 +49,19 @@ export class UserRepository {
 
         if(response.rows.length === 0) { throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND, APP_ERROR_MESSAGE.invalidEmail); }
 
-        const data = response.toJSON()[0];
+        const data = JSON.parse(JSON.stringify(response.rows[0]));
 
-        const passwordCorrect = await validatePasswordHash(password, data["PasswordHash"]);
+        const passwordCorrect = await validatePasswordHash(password, data["PasswordHash"], data["Salt"]);
         if(!passwordCorrect) { throw new HttpException(HTTP_RESPONSE_CODE.UNAUTHORIZED, APP_ERROR_MESSAGE.invalidPassword); }
 
-
-        return new UserResponseDTO(data["FirstName"], data["LastName"], data["Email"], data["Timezone"], data["State"], data["Country"], data["DateCreated"]);
+        return {userKey: data["UserKey"], user: new UserResponseDTO(data["FirstName"], data["LastName"], data["Email"], data["Timezone"], data["State"], data["Country"], data["DateCreated"])};
     }
 
     updateUser = async (userKey: string, user: UserUpdateDTO): Promise<void> => {
         if(user.firstName !== undefined) {
             const response = await this.db.execute({
                 sql: UserQueries.updateUserFirstName,
-                args: [user.firstName]
+                args: [user.firstName, userKey]
             })
 
             if(response.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
@@ -70,8 +69,8 @@ export class UserRepository {
 
         if(user.lastName !== undefined) {
             const response = await this.db.execute({
-                sql: UserQueries.updateUserFirstName,
-                args: [user.lastName]
+                sql: UserQueries.updateUserLastName,
+                args: [user.lastName, userKey]
             })
 
             if(response.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
@@ -80,7 +79,7 @@ export class UserRepository {
         if(user.email !== undefined) {
             const response = await this.db.execute({
                 sql: UserQueries.updateUserEmail,
-                args: [user.email]
+                args: [user.email, userKey]
             })
 
             if(response.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
@@ -89,7 +88,7 @@ export class UserRepository {
         if(user.country !== undefined) {
             const response = await this.db.execute({
                 sql: UserQueries.updateUserCountry,
-                args: [user.country]
+                args: [user.country, userKey]
             })
 
             if(response.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
@@ -98,7 +97,7 @@ export class UserRepository {
         if(user.state !== undefined) {
             const response = await this.db.execute({
                 sql: UserQueries.updateUserState,
-                args: [user.state]
+                args: [user.state, userKey]
             })
 
             if(response.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
@@ -107,7 +106,7 @@ export class UserRepository {
         if(user.timezone !== undefined) {
             const response = await this.db.execute({
                 sql: UserQueries.updateUserTimezone,
-                args: [user.timezone]
+                args: [user.timezone, userKey]
             })
 
             if(response.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
@@ -126,10 +125,15 @@ export class UserRepository {
     updateUserPassword = async(userKey: string, passwordData: UserPasswordUpdateDTO): Promise<void> => {
         const newHashedData = await passwordData.hashNewPassword();
         const response = await this.db.execute({
-            sql: UserQueries.updateUserPasswordHashWithSalt,
-            args: [newHashedData.passwordHash, newHashedData.salt, userKey]
+            sql: UserQueries.updateUserSalt,
+            args: [newHashedData.salt, userKey]
         })
 
-        if(response.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
+        const secondResponse = await this.db.execute({
+            sql: UserQueries.updateUserPasswordHash,
+            args: [newHashedData.passwordHash, userKey]
+        })
+
+        if(response.toJSON()["status"] === "error" || secondResponse.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
     }
 }

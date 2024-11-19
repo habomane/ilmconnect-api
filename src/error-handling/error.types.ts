@@ -14,7 +14,8 @@ export const HTTP_RESPONSE_CODE = {
     userAuthenticated: "User Authenticated successfully",
     userDeleted: "User deleted successfully",
     userFound: "User returned successfully",
-    userUpdated: "User information updated successfully"
+    userUpdated: "User information updated successfully",
+    userPasswordUpdated: "User password updated successfully"
   }
 
   export const APP_ERROR_MESSAGE = {

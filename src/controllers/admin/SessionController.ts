@@ -17,7 +17,7 @@ export class SessionController {
     this.sessionService = new SessionService();
   }
 
-  validateSession = async (req: Request, res: Response, next: NextFunction) => {
+  validateSession = async (req: Request, res: Response): Promise<boolean> => {
     try {
       const token = req.cookies["token"];
       const sessionData = await this.sessionService.getSessionByToken(token);
@@ -28,9 +28,11 @@ export class SessionController {
         );
       }
 
-      next();
+      return true;
+
     } catch (error) {
       errorMiddleware(error, req, res);
+      return false;
     }
   };
 

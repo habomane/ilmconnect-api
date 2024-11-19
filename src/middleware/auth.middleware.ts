@@ -3,7 +3,7 @@ import { Session } from "../database";
 import { SessionController } from "../controllers";
 import { HttpResponse } from "../models";
 
-export const validateSessionMiddleware = (
+export const validateSessionMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -13,7 +13,8 @@ export const validateSessionMiddleware = (
     next();
     return;
   }
-  sessionController.validateSession(req, res, next);
+  const isValidSession = await sessionController.validateSession(req, res);
+  if(isValidSession) { next(); };
 };
 
 export const setCookiesMiddleware = async (
@@ -26,6 +27,7 @@ export const setCookiesMiddleware = async (
   const dateExpiredUserTimezone = await session.getDateUserTimezone(
     req.ip || ""
   );
+   
   res.cookie("token", session.token, {
     secure: process.env.NODE_ENV !== "development",
     httpOnly: true,
