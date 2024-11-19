@@ -11,7 +11,7 @@ export const HTTP_RESPONSE_CODE = {
   
   export const APP_SUCCESS_MESSAGE = {
     createdUser: "User created successfully",
-    userAuthenticated: "User Authenticated successfully",
+    userAuthenticated: "User authenticated successfully",
     userDeleted: "User deleted successfully",
     userFound: "User returned successfully",
     userUpdated: "User information updated successfully",

@@ -48,10 +48,10 @@ export class UserController {
 
   loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const {userKey, user} = await this.userService.validateUser(req.body["email"], req.body["password"]);
-        const response = new HttpResponse(HTTP_RESPONSE_CODE.SUCCESS, APP_SUCCESS_MESSAGE.userAuthenticated, user);
+        const responseBody  = await this.userService.validateUser(req.body["email"], req.body["password"]);
+        const response = new HttpResponse(HTTP_RESPONSE_CODE.SUCCESS, APP_SUCCESS_MESSAGE.userAuthenticated, responseBody);
         
-        this.sessionController.createSession(userKey, response, req, res, next);
+        this.sessionController.createSession(responseBody.userKey, response, req, res, next);
     } catch (error) {
       errorMiddleware(error, req, res);
     }

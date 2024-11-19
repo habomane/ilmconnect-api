@@ -24,7 +24,7 @@ export class UserRepository {
 
         if(response.toJSON()["status"] === "error") { throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError); }
         
-        return new UserResponseDTO(user.firstName, user.lastName, user.email, user.timezone, user.state, user.country, user.dateCreated); 
+        return new UserResponseDTO(user.userKey, user.firstName, user.lastName, user.email, user.timezone, user.state, user.country, user.dateCreated); 
     }
 
     getUserByUserKey = async (userKey: string): Promise<UserResponseDTO> => {
@@ -37,11 +37,11 @@ export class UserRepository {
 
         const data = JSON.parse(JSON.stringify(response.rows[0]));
 
-        return new UserResponseDTO(data["FirstName"], data["LastName"], data["Email"], data["Timezone"], data["State"], data["Country"], data["DateCreated"]);
+        return new UserResponseDTO(data["UserKey"], data["FirstName"], data["LastName"], data["Email"], data["Timezone"], data["State"], data["Country"], data["DateCreated"]);
 
     }
 
-    validateUserCredentials = async (emailAddress: string, password: string): Promise<{userKey: string, user: UserResponseDTO}> => {
+    validateUserCredentials = async (emailAddress: string, password: string): Promise<UserResponseDTO> => {
         const response = await this.db.execute({
             sql:  UserQueries.getUserByEmail,
             args: [emailAddress]
@@ -54,7 +54,7 @@ export class UserRepository {
         const passwordCorrect = await validatePasswordHash(password, data["PasswordHash"], data["Salt"]);
         if(!passwordCorrect) { throw new HttpException(HTTP_RESPONSE_CODE.UNAUTHORIZED, APP_ERROR_MESSAGE.invalidPassword); }
 
-        return {userKey: data["UserKey"], user: new UserResponseDTO(data["FirstName"], data["LastName"], data["Email"], data["Timezone"], data["State"], data["Country"], data["DateCreated"])};
+        return new UserResponseDTO(data["UserKey"], data["FirstName"], data["LastName"], data["Email"], data["Timezone"], data["State"], data["Country"], data["DateCreated"]);
     }
 
     updateUser = async (userKey: string, user: UserUpdateDTO): Promise<void> => {

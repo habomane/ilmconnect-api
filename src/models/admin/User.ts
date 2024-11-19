@@ -81,6 +81,7 @@ export class UserPasswordUpdateDTO {
 
 
 export class UserResponseDTO {
+    userKey: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -91,6 +92,7 @@ export class UserResponseDTO {
 
 
     constructor(
+        userKey: string,
         firstName: string,
         lastName: string,
         email: string,
@@ -99,6 +101,7 @@ export class UserResponseDTO {
         country: string,
         dateJoined: string
     ) {
+        this.userKey = userKey;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
