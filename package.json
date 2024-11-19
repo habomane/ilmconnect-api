@@ -24,7 +24,8 @@
     "express-validator": "^7.2.0",
     "geoip-lite": "^1.4.10",
     "moment-timezone": "^0.5.46",
-    "node": "^18.20.5"
+    "node": "^18.20.5",
+    "vercel": "^39.0.4"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
