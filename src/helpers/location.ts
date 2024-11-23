@@ -7,7 +7,10 @@ export const getTimezoneFromIP = async (ipAddress: string): Promise<number> => {
     const geo = await response.json();
   
     if (geo.status !== 'success') {
-        throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError);
+        if(geo.message === "private range") { return -5; }
+        else {
+            throw new HttpException(HTTP_RESPONSE_CODE.SERVER_ERROR, APP_ERROR_MESSAGE.serverError);
+        }
     }
     const utcOffset = moment.tz(geo.timezone).utcOffset() / 60;
     return utcOffset;

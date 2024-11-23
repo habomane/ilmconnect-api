@@ -1,13 +1,15 @@
-FROM node
+FROM node:16-alpine as build
 
-WORKDIR /
+WORKDIR /usr/src/app
 
-COPY package.json .
+COPY package*.json .
 
 RUN npm install
 
 COPY . .
 
-EXPOSE 8001
+RUN npm run build
 
-CMD ["npm", "start"]
+EXPOSE 8080
+
+CMD [ "node", "dist/index.js" ]

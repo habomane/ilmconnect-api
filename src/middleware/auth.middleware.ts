@@ -9,7 +9,7 @@ export const validateSessionMiddleware = async (
   next: NextFunction
 ) => {
   const sessionController = new SessionController();
-  if (req.url === "/user/login" || req.url === "/user/register") {
+  if (req.url === "/user/login" || req.url === "/user/register" || req.url === "/ping") {
     next();
     return;
   }
