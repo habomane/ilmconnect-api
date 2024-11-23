@@ -169,7 +169,7 @@ This endpoint will return a message stating the password has been modified. A su
 
 This endpoint allows users to delete existing users for the specified user associated with the user key parameter. 
 
-his endpoint will return a message stating the user has been deleted. A successful request will have a status of <strong>201.</strong>
+his endpoint will return a message stating the user has been deleted. A successful request will have a status of <strong>200.</strong>
 
 ```
 // RESPONSE
