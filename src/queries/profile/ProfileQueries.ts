@@ -1,0 +1,18 @@
+export const ProfileQueries = {
+    createProfile: "INSERT INTO Profiles (ProfileKey, UserKey, DisplayName, Profession, CurrentCompany, ProfileType, Description, LinkedinLink, BookingLink, ProfilePictureLink, PortfolioLink, YearsOfExperience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+    getMentors: "SELECT * FROM PROFILES WHERE ProfileType IN ('Mentor', 'Both')",
+    getProfileByProfileKey: "SELECT * FROM Profile WHERE ProfileKey = ?", 
+    getProfileByUserKey: "SELECT * FROM ProfileS WHERE UserKey = ?", 
+    updateProfileDisplayName: "UPDATE ProfileS SET DisplayName = ? WHERE ProfileKey = ?",
+    updateProfileProfession: "UPDATE ProfileS SET Profession = ? WHERE ProfileKey = ?",
+    updateProfileCurrentCompany:"UPDATE ProfileS SET CurrentCompany = ? WHERE ProfileKey = ?",
+    updateProfileProfileType:"UPDATE ProfileS SET ProfileType = ? WHERE ProfileKey = ?",
+    updateProfileDescription: "UPDATE ProfileS SET Description = ? WHERE ProfileKey = ?",
+    updateProfileLinkedinLink: "UPDATE ProfileS SET LinkedinLink = ? WHERE ProfileKey = ?",
+    updateProfileBookingLink: "UPDATE ProfileS SET BookingLink = ? WHERE ProfileKey = ?",
+    updateProfileProfilePictureLink: "UPDATE ProfileS SET ProfilePictureLink = ? WHERE ProfileKey = ?",
+    updateProfilePortfolioLink: "UPDATE ProfileS SET PortfolioLink = ? WHERE ProfileKey = ?",
+    updateProfileYearsOfExperience: "UPDATE ProfileS SET YearsOfExperience = ? WHERE ProfileKey = ?",
+    updateProfileSalt: "UPDATE ProfileS SET Salt = ? WHERE ProfileKey = ?",
+    deleteProfile: "DELETE FROM Profiles WHERE ProfileKey =?",
+}
