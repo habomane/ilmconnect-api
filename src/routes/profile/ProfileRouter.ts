@@ -9,7 +9,8 @@ const profileController = new ProfileController();
 // Route only concerned with HTTP Layer
 
 profileRouter.get('/mentors', profileController.getMentors);
-profileRouter.get("/:userKey", profileController.getProfile);
+profileRouter.get("/user/:userKey", profileController.getProfileByUserKey);
+profileRouter.get("/:profileKey", profileController.getProfileByProfileKey);
 profileRouter.post("/create", createProfileValidation, profileController.createProfile);
 profileRouter.delete("/delete/:profileKey", profileController.deleteProfile);
 profileRouter.put('/update/:profileKey', updateProfileValidation, profileController.updateProfile);

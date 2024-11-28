@@ -24,7 +24,8 @@ import {
             // Getting skills
             for(const mentor of mentors) {
                 const skills = await this.skillService.getAllSkillsByProfileKey(mentor.profileKey);
-                mentor.setSkills(skills);
+                const skillsMappedToStr = skills.map((item) => item.skill);
+                mentor.setSkills(skillsMappedToStr);
 
                 responseBody.push(mentor);
             }
@@ -38,14 +39,33 @@ import {
         }
       };
 
-    getProfile = async (req: Request, res: Response, next: NextFunction) => {
+    getProfileByUserKey = async (req: Request, res: Response, next: NextFunction) => {
+        try {
+            const userKey = req.params["userKey"];
+            const responseBody = await this.profileService.getProfileByUserKey(userKey);
+  
+            // Getting skills
+            const skills = await this.skillService.getAllSkillsByProfileKey(responseBody.profileKey);
+            const skillsMappedToStr = skills.map((item) => item.skill);
+            responseBody.setSkills(skillsMappedToStr);
+
+            const response = new HttpResponse(HTTP_RESPONSE_CODE.SUCCESS, APP_SUCCESS_MESSAGE.profileFound, responseBody);
+            res.status(response.status).send(response);
+  
+        } catch (error) {
+          errorMiddleware(error, req, res);
+        }
+      };
+
+    getProfileByProfileKey = async (req: Request, res: Response, next: NextFunction) => {
       try {
-          const userKey = req.params["userKey"];
-          const responseBody = await this.profileService.getProfileByUserKey(userKey);
+          const profileKey = req.params["profileKey"];
+          const responseBody = await this.profileService.getProfileByProfileKey(profileKey);
 
           // Getting skills
           const skills = await this.skillService.getAllSkillsByProfileKey(responseBody.profileKey);
-          responseBody.setSkills(skills);
+          const skillsMappedToStr = skills.map((item) => item.skill);
+          responseBody.setSkills(skillsMappedToStr);
 
           const response = new HttpResponse(HTTP_RESPONSE_CODE.SUCCESS, APP_SUCCESS_MESSAGE.profileFound, responseBody);
           res.status(response.status).send(response);

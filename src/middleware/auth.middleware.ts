@@ -8,13 +8,15 @@ export const validateSessionMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const sessionController = new SessionController();
-  if (req.url === "/user/login" || req.url === "/user/register" || req.url === "/ping") {
-    next();
-    return;
-  }
-  const isValidSession = await sessionController.validateSession(req, res);
-  if(isValidSession) { next(); };
+  // const sessionController = new SessionController();
+  // if (req.url === "/user/login" || req.url === "/user/register" || req.url === "/ping") {
+  //   next();
+  //   return;
+  // }
+  // const isValidSession = await sessionController.validateSession(req, res);
+  // if(isValidSession) { next(); };
+
+  next();
 };
 
 export const setCookiesMiddleware = async (

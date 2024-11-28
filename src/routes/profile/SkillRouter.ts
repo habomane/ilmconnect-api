@@ -9,4 +9,4 @@ const skillController = new SkillController();
 // Route only concerned with HTTP Layer
 
 skillRouter.post("/create", createSkillValidation , skillController.createSkill);
-skillRouter.delete("/delete/:userKey", skillController.deleteSkill);
+skillRouter.delete("/delete/:profileKey", skillController.deleteSkill);

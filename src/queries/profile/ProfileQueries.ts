@@ -1,8 +1,8 @@
 export const ProfileQueries = {
     createProfile: "INSERT INTO Profiles (ProfileKey, UserKey, DisplayName, Profession, CurrentCompany, ProfileType, Description, LinkedinLink, BookingLink, ProfilePictureLink, PortfolioLink, YearsOfExperience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     getMentors: "SELECT * FROM PROFILES WHERE ProfileType IN ('Mentor', 'Both')",
-    getProfileByProfileKey: "SELECT * FROM Profile WHERE ProfileKey = ?", 
-    getProfileByUserKey: "SELECT * FROM ProfileS WHERE UserKey = ?", 
+    getProfileByProfileKey: "SELECT * FROM Profiles WHERE ProfileKey = ?", 
+    getProfileByUserKey: "SELECT * FROM Profiles WHERE UserKey = ?", 
     updateProfileDisplayName: "UPDATE ProfileS SET DisplayName = ? WHERE ProfileKey = ?",
     updateProfileProfession: "UPDATE ProfileS SET Profession = ? WHERE ProfileKey = ?",
     updateProfileCurrentCompany:"UPDATE ProfileS SET CurrentCompany = ? WHERE ProfileKey = ?",

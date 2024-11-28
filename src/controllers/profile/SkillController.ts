@@ -16,7 +16,7 @@ export class SkillController {
     try {
 
       const createdSkill = new Skill(
-        req.body["userKey"],
+        req.body["profileKey"],
         req.body["skill"]
       );
       const responseBody = await this.skillService.createSkill(createdSkill);

@@ -59,6 +59,25 @@ export class ProfileRepository {
 
     }
 
+    getProfileByProfileKey = async (profileKey: string): Promise<ProfileResponseDTO> => {
+        const response = await this.db.execute({
+            sql:  ProfileQueries.getProfileByProfileKey,
+            args: [profileKey]
+        })
+
+        if(response.rows.length === 0) { throw new HttpException(HTTP_RESPONSE_CODE.NOT_FOUND, APP_ERROR_MESSAGE.profileNotFound); }
+
+        const data = JSON.parse(JSON.stringify(response.rows[0]));
+
+        const profile = new Profile(data["UserKey"], data["ProfileKey"], data["DisplayName"], data["ProfileType"], data["Profession"], data["CurrentCompany"], data["Description"], data["LinkedinList"],
+            data["ProfilePictureLink"], data["PortfolioLink"], data["BookingLink"], data["YearsOfExperience"]
+        );
+
+        return new ProfileResponseDTO(profile);
+
+
+    }
+
     updateProfileByProfileKey = async (profileKey: string, profile: ProfileUpdateDTO): Promise<void> => {
 
         if(profile.bookingLink !== undefined) {

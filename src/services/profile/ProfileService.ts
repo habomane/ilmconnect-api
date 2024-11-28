@@ -15,6 +15,10 @@ export class ProfileService {
         return await this.profileRepository.getProfileByUserKey(userKey);
     }
 
+    getProfileByProfileKey = async (profileKey: string): Promise<ProfileResponseDTO> => {
+        return await this.profileRepository.getProfileByProfileKey(profileKey);
+    }
+
     getMentors = async (): Promise<ProfileResponseDTO[]> => {
         return await this.profileRepository.getMentorProfiles();
     }

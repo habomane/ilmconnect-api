@@ -102,7 +102,7 @@ export class ProfileResponseDTO {
     profilePictureLink: string;
     portfolioLink: string;
     yearsOfExperience: number;
-    skills: Skill[];
+    skills: string[];
 
 
     constructor(
@@ -123,7 +123,7 @@ export class ProfileResponseDTO {
         this.skills = [];
     }
 
-    setSkills = (skills: Skill[]) : void => {
+    setSkills = (skills: string[]) : void => {
         this.skills = skills;
     }
 }
