@@ -1,6 +1,21 @@
 # IlmConnect REST API
 Submission for Technology Sisters Hackathon November 2024 API
 
+## Ping 
+
+### GET
+
+<b>{api}/ping</b>
+
+This test endpoint enables users to wake the server (if asleep) and ensure server is working as expectd. A successful request will return a HTTP status of <strong>200.</strong>
+
+```
+// EXAMPLE RESPONSE
+
+pong
+
+```
+
 ## Users
 
 ### GET
